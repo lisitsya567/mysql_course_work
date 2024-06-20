@@ -6,27 +6,32 @@
 # Триггер с условием и обработчиком исключений, проверка баланса
 ```sql
 DELIMITER $$
-
 CREATE TRIGGER trigger_update_salary
 BEFORE UPDATE
 ON salary
 FOR EACH ROW
 BEGIN
-    DECLARE insufficient_balance CONDITION FOR SQLSTATE '45000';
-    DECLARE current_balance DECIMAL(10, 2);
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION
+    BEGIN
+        -- Обработка ошибки: записывает в лог
+        INSERT INTO error_log (error_message) VALUES ('Ошибка при обновлении salary');
+    END;
 
+    -- Получаем баланс у id = 1 (Является стоматологией)
     SELECT balance INTO current_balance
     FROM salary
     WHERE id = 1;
 
+    -- Проверка баланса
     IF current_balance < 1000000 THEN
+        -- Если баланс недостаточен, генерируется ошибка и откатывается транзакция
         SIGNAL SQLSTATE '45000'
         SET MESSAGE_TEXT = 'Операция не может быть выполнена из-за недостатка средств на счете';
     END IF;
 END;
 $$
+DELIMITER;
 
-DELIMITER ;
 
 
 
