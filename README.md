@@ -1,4 +1,5 @@
 ![ER_diagram](https://github.com/lisitsya567/mysql_course_work/assets/120280978/6e533a21-1625-44fb-98b7-3743049b8f1f)
+![IMG_456цкпукцпц5](https://github.com/lisitsya567/mysql_course_work/assets/120280978/12210b36-2b84-4c2b-afce-43507fb91013)
 
 
 
